@@ -6,12 +6,12 @@ module ShopifyAppMixins::SequelSessionStorage
       shop = find_or_create shopify_domain: session.url do |shop|
         shop.shopify_token = session.token
       end
-      shop.id
+      shop.pk
     end
 
-    def retrieve(id)
-      return unless id
-      if shop = self.find(id: id)
+    def retrieve(pk)
+      return unless pk
+      if shop = self[pk]
         ShopifyAPI::Session.new(shop.shopify_domain, shop.shopify_token)
       end
     end
@@ -29,5 +29,4 @@ module ShopifyAppMixins::SequelSessionStorage
   def metadata
     @metadata ||= ShopifyAPI::Shop.current
   end
-
 end
